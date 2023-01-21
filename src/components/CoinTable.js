@@ -20,10 +20,14 @@ import { CoinList } from "./Api";
 import { CryptoState } from "./Contex";
 import{numberWithCommas} from "./Carousel";
 const useStyles = makeStyles(() => ({
-  row: {
-
-  },
-}));
+  row:{
+    backgroundColor:"#16171a",
+    cursor:"pointer",
+    fontFamily:"Montserrat",
+    "&:hover":{
+      backgroundColor:"#131111",
+    }
+    }}));
 
 
 function CoinTable() {
@@ -123,7 +127,7 @@ function CoinTable() {
                       key={row.name}
                     >
                       <TableCell component='th' scope='row'
-                      style={{display: 'flex',gap:15,cursor:"pointer"}} 
+                      style={{display: 'flex',gap:15}} 
                       >
                         <img 
                         src={row.image}
