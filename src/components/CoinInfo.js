@@ -1,77 +1,33 @@
-import { CircularProgress, createTheme, makeStyles, ThemeProvider } from '@material-ui/core';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { Line } from 'react-chartjs-2';
-import { HistoricalChart } from './Api';
-import { CryptoState } from './Contex';
-
-
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    width: "75%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 25,
-    padding: 40,
-    [theme.breakpoints.down("md")]: {
-      width: "100%",
-      marginTop: 0,
-      padding: 20,
-      paddingTop: 0,
-    },
-  },
-}));
-
+import React, { useState, useEffect } from "react";
+import { Line } from "react-chartjs-2";
+import { CryptoState } from "./Contex";
+import {
+     Chart as ChartJS,
+     LineElement,
+     CategoryScale,
+     LinearScale,
+     PointElement,
+} from "chart.js";
+import { HistoricalChart } from "./Api";
+import axios from "axios";
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
 function CoinInfo(coin) {
-  const [historicData, setHistoricData] = useState();
-  const [days, setDays] = useState(1);
-  const { currency } = CryptoState();
-  const [flag,setflag] = useState(false);
-  const classes = useStyles();
-  const fetchHistoricData = async () => {
-    const { data } = await axios.get(HistoricalChart(coin.id, days, currency));
-    setflag(true);
-    setHistoricData(data.prices);
-  };
-  const darkTheme = createTheme({
-    palette: {
-      primary: {
-        main: "#fff",
-      },
-      type: "dark",
-    },
-  });
+     const [historicData, setHistoricData] = useState("");
+     const [days, setDays] = useState(1);
+     const { currency } = CryptoState();
 
-  console.log(coin);
+     const fetchData = async () => {
+          const { data } = await axios.get(
+               HistoricalChart(coin.id, days, currency)
+          );
+          setHistoricData(data);
+     };
+     useEffect(() => {
+          fetchData();
+     }, []);
 
-  useEffect(() => {
-    fetchHistoricData();
-    
-  }, [days]);
-
-
-  return (
-    <ThemeProvider theme={darkTheme}>
-      <div className={classes.container}>
-        {
-          !historicData?(
-            <CircularProgress style={{color: 'gold'}} size={250} thickness={1}/>
-          ):(
-          <>
-          <Line>
-            
-          </Line>
-          </>
-          )
-        }
-      </div>
-
-    </ThemeProvider>
-  )
+     return <div></div>;
 }
 
 export default CoinInfo;
